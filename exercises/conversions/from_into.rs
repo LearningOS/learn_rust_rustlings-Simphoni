@@ -33,10 +33,31 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of Person
 // Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
-
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        let s = String::from(s);
+        let mut sep: usize = 0;
+        for i in 0..s.len() {
+            if s.chars().nth(i).unwrap() == ',' {
+                sep = i;
+                break;
+            }
+        }
+        if sep == 0 {
+            return Person::default();
+        } else {
+            match &s[sep+1..].parse::<usize>() {
+                Ok(a) => {
+                    return Person {
+                        name: String::from(&s[0..sep]),
+                        age: *a,
+                    }
+                },
+                Err(_) => {
+                    return Person::default();
+                }
+            }
+        }
     }
 }
 
